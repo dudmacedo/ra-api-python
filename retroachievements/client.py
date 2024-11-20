@@ -40,6 +40,16 @@ class RAClient:
 
     # User endpoints
 
+    """
+    Get a user's minimal profile information, such as their ID, motto, most recent game ID, avatar, and points.
+
+    Params:
+        u: Username to query
+    """
+    def get_user_profile(self, user: str) -> dict:
+        result = self._call_api("API_GetUserProfile.php?", {"u": user}).json()
+        return result
+
     def get_user_points(self, user: str) -> dict:
         """
         Get a user's total hardcore and softcore points
