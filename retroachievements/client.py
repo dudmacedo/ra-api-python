@@ -270,6 +270,32 @@ class RAClient:
     def get_game_high_scores(self, game_id: int, masters: bool = False) -> dict:
         result = self._call_api("API_GetGameRankAndScore.php?", {"i": game_id, "t": 1 if masters else 0}).json()
         return result
+    
+    ### Leaderboards Endpoints
+
+    """
+    Get a given games's list of leaderboards
+
+    Params:
+        game_id: The target game ID
+        count: Number of records to return (default: 100, max: 500)
+        offset: Number of entries to skip (default: 0)
+    """
+    def get_leaderboards(self, game_id: int, count: int = 100, offset: int = 0) -> dict:
+        result = self._call_api("API_GetGameLeaderboards.php?", {"i": game_id, "c": count, "o": offset}).json()
+        return result
+    
+    """
+    Get a given leadboard's entires
+
+    Params:
+        leaderboard_id: The target leaderboard ID
+        count: Number of records to return (default: 100, max: 500)
+        offset: Number of entries to skip (default: 0)
+    """
+    def get_leaderboard_entries(self, leaderboard_id: int, count: int = 100, offset: int = 0) -> dict:
+        result = self._call_api("API_GetLeaderboardEntries.php?", {"i": leaderboard_id, "c": count, "o": offset}).json()
+        return result
 
     # System Endpoints
 
