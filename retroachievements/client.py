@@ -206,49 +206,69 @@ class RAClient:
         result = self._call_api("API_GetUserWantToPlayList.php?", {"u": user, "c": count, "o": offset}).json()
         return result
 
-    # Game endpoints
+    ### Game endpoints
 
-    def get_game(self, game: int) -> dict:
-        """
-        Get basic metadata about a game
+    """
+    Get basic metadata about a game
 
-        Params:
-            i: The game ID to query
-        """
-        result = self._call_api("API_GetGame.php?", {"i": game}).json()
+    Params:
+        game_id: The target game ID
+    """
+    def get_game_summary(self, game_id: int) -> dict:        
+        result = self._call_api("API_GetGame.php?", {"i": game_id}).json()
         return result
 
-    def get_game_extended(self, game: int) -> dict:
-        """
-        Get extended metadata about a game
+    """
+    Get extended metadata about a game
 
-        Params:
-            i: The game ID to query
-        """
-        result = self._call_api("API_GetGameExtended.php?", {"i": game}).json()
+    Params:
+        game_id: The target game ID
+    """
+    def get_game_extended(self, game_id: int) -> dict:
+        result = self._call_api("API_GetGameExtended.php?", {"i": game_id}).json()
         return result
 
-    def get_achievement_count(self, game: int) -> dict:
-        """
-        Get the list of achievement ID's for a game
+    """
+    Get game hashes
 
-        Params:
-            i: The game ID to query
-        """
-        result = self._call_api(
-            "API_GetAchievementCount.php?", {"i": game}).json()
+    Params:
+        game_id: The target game ID
+    """
+    def get_game_hashes(self, game_id:int) -> dict:
+        result = self._call_api("API_GetGameHashes.php?", {"i": game_id}).json()
         return result
 
-    def get_achievement_distribution(self, game: int) -> dict:
-        """
-        Get how many players have unlocked how many achievements for a game
+    """
+    Get the list of achievement ID's for a game
 
-        Params:
-            i: The game ID to query
-        """
-        result = self._call_api(
-            "API_GetAchievementDistribution.php?", {"i": game}
-        ).json()
+    Params:
+        game_id: The target game ID
+    """
+    def get_game_achievement_count(self, game_id: int) -> dict:
+        result = self._call_api("API_GetAchievementCount.php?", {"i": game_id}).json()
+        return result
+    
+    """
+    Get how many players have unlocked how many achievements for a game
+
+    Params:
+        game_id: The target game ID
+        hardcore: Query hardcore unlocks (default: False)
+        official: True for official achievements, False for unofficial achievements. (default: True)
+    """
+    def get_game_achievement_distribution(self, game_id: int, hardcore: bool = False, official: bool = True) -> dict:
+        result = self._call_api("API_GetAchievementDistribution.php?", {"i": game_id, "h": 1 if hardcore else 0, "f": 3 if official else 5}).json()
+        return result
+
+    """
+    Get metadata about either the latest masters for a game, or the highest points earners for a game
+
+    Params:
+        game_id: The target game ID
+        masters: True for latest masters, False for non-masters high scores. (default: False)
+    """
+    def get_game_high_scores(self, game_id: int, masters: bool = False) -> dict:
+        result = self._call_api("API_GetGameRankAndScore.php?", {"i": game_id, "t": 1 if masters else 0}).json()
         return result
 
     # System Endpoints
