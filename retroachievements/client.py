@@ -363,3 +363,14 @@ class RAClient:
             params["i"] = item_id
         result = self._call_api("API_GetComments.php?", params)
         return result
+
+    ### Event Endpoints
+
+    """
+    Get comprehensive metadata about the current Achievement of the Week
+
+    Params:
+        None
+    """
+    def get_achievement_of_the_week(self) -> dict:
+        result = self._call_api("API_GetAchievementOfTheWeek.php?")
