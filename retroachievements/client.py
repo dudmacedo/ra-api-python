@@ -297,29 +297,37 @@ class RAClient:
         result = self._call_api("API_GetLeaderboardEntries.php?", {"i": leaderboard_id, "c": count, "o": offset}).json()
         return result
 
-    # System Endpoints
+    ### System Endpoints
 
-    def get_console_ids(self) -> list:
-        """
-        Get the complete list of console ID and name pairs on the site
+    """
+    Get the complete list of console ID and name pairs on the site
 
-        Params:
-            None
-        """
-        result = self._call_api("API_GetConsoleIDs.php?", {}).json()
+    Params:
+        active_systems: If True, only return active systems (default: False)
+        gaming_systems: If True, only return gaming systems (not Hubs, Events, etc) (default: False)
+    """
+    def get_system_ids(self, active_systems: bool = False, gaming_systems: bool = False) -> list:        
+        result = self._call_api("API_GetConsoleIDs.php?", {"a": 1 if active_systems else 0, "g": 1 if gaming_systems else 0}).json()
         return result
 
-    def get_game_list(self, system: int, has_cheevos=0, hashes=0) -> dict:
-        """
-        Get the complete list of games for a console
+    """
+    Get the complete list of games for a console
 
-        Params:
-            i: The system ID to query
-            f: If 1, only returns games that have achievements (default = 0)
-            h: If 1, also return the supported hashes for games (default = 0)
-        """
+    Params:
+        system_id: The target system ID
+        has_cheevos: If True, only returns games that have achievements (default: False)
+        hashes: If True, also return the supported hashes for games (default: False)
+        offset: Offset of the list of results. Ignores the first X results set in this parameter. (default: 0)
+        count: Number of max results desired. Defaults to 0, which means all the results. (default: 0)
+    """
+    def get_system_game_list(self, system_id: int, has_cheevos: bool = False, hashes: bool = False, offset: int = 0, count: int = 0) -> dict:
         result = self._call_api(
-            "API_GetGameList.php?", {
-                "i": system, "f": has_cheevos, "h": hashes}
-        ).json()
+            "API_GetGameList.php?",
+            {
+                "i": system_id, 
+                "f": 1 if has_cheevos else 0, 
+                "h": 1 if hashes else 0,
+                "o": offset,
+                "c": count
+            }).json()
         return result
