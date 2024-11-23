@@ -331,3 +331,35 @@ class RAClient:
                 "c": count
             }).json()
         return result
+
+    ### Achievement Endpoints
+
+    """
+    Get a list of users who have earned an achievement, targeted by the achievement's ID.
+
+    Params:
+        achievement_id: The target achievement ID
+        count: Number of records to return (default: 50, max: 500)
+        offset: Number of entries to skip (default: 0)
+    """
+    def get_achievement_unlocks(self, achievement_id: int, count: int = 50, offset: int = 0) -> dict:
+        result = self._call_api("API_GetAchievementUnlocks.php?", {"a": achievement_id, "c": count, "o": offset})
+        return result
+    
+    ### Comments Endpoints
+
+    """
+    Get comments of a specified kind: game, achievement, or user.
+
+    Params:
+        kind: The target comment kind 1 (game), 2 (achievement) or 3 (user)
+        item_id: The target game or achievement ID (if kind is 1 or 2). The target username (if kind is 3). Required if kind is 1 or 3
+        count: Number of records to return (default: 100, max: 500)
+        offset: Number of entries to skip (default: 0)
+    """
+    def get_comments(self, kind: int, item_id: int, count: int = 100, offset:int = 0) -> dict:
+        params = {"t": kind, "c": count, "o": offset}
+        if item_id is not None:
+            params["i"] = item_id
+        result = self._call_api("API_GetComments.php?", params)
+        return result
