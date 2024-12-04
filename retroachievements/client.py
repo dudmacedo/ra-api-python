@@ -374,3 +374,74 @@ class RAClient:
     """
     def get_achievement_of_the_week(self) -> dict:
         result = self._call_api("API_GetAchievementOfTheWeek.php?")
+
+    ### Ticket Endpoints
+
+    """
+    Get ticket metadata information about a single achievement ticket, targeted by its ticket ID.
+
+    Params:
+        ticket_id: The target ticket ID
+    """
+    def get_ticket_metadata(self, ticket_id: int) -> dict:
+        result = self._call_api("API_GetTicketData?", {"i": ticket_id})
+        return result
+    
+    """
+    Get the games on the site with the highest count of opened achievement tickets.
+
+    Params:
+        count: Number of records to return (default: 10, max:100)
+        offset: Number of entries to skip (default: 0)
+    """
+    def get_most_ticketed_games(self, count:int = 10, offset:int = 0) -> dict:
+        result = self._call_api("API_GetTicketData?", {"f": 1, "c": count, "o": offset})
+        return result
+    
+    """
+    Get ticket metadata information about the latest opened achievement tickets on RetroAchievements.
+
+    Params:
+        count: Number of records to return (default: 10, max:100)
+        offset: Number of entries to skip (default: 0)
+    """
+    def get_most_recent_tickets(self, count:int = 10, offset:int = 0) -> dict:
+        result = self._call_api("API_GetTicketData?", {"c": count, "o": offset})
+        return result
+    
+    """
+    Get ticket stats for a game, targeted by that game's unique ID.
+
+    Params:
+        game_id: The target game ID
+        official: True for official achievements, False for unofficial achievements. (default: True)
+        deep_data: True if you want deep ticket metadata in response's Tickets array. (default: False)
+    """
+    def get_game_ticket_stats(self, game_id:int, official:bool = True, deep_data:bool = False) -> dict:
+        params = {"g": game_id}
+        if not official:
+            params["f"] = 5
+        if deep_data:
+            params["d"] = 1
+        result = self._call_api("API_GetTicketData?", params)
+        return result
+    
+    """
+    Get ticket stats for a developer, targeted by that developer's site username.
+
+    Params:
+        developer: The target developer's username
+    """
+    def get_developer_ticket_stats(self, developer:str) -> dict:
+        result = self._call_api("API_GetTicketData?", {"u": developer})
+        return result
+    
+    """
+    Get ticket stats for an achievement, targeted by that achievement's unique ID.
+
+    Params:
+        achievement_id: The target achievement ID to fetch ticket stats for
+    """
+    def get_achievement_ticket_stats(self, achievement_id:int) -> dict:
+        result = self._call_api("API_GetTicketData?", {"a": achievement_id})
+        return result
